@@ -22,7 +22,21 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
 
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -46,6 +60,16 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input'); // this is a NodeList, not an array; sometimes it will be helpful to convert to an array to have access to more methods
+
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || ''; // dataset takes every attribute that begins with data- and makes it accessible in an object
+
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+
+    inputs.forEach(input => input.addEventListener('change', handleUpdate)); // fires after change is complete
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate)); // fires during mousemove https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event
   </script>
 
 </body>
