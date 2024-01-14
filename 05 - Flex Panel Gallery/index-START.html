@@ -25,11 +25,17 @@
     }
 
     .panels {
+      display: flex; /* flexbox by default displays the panels side-by-side */
       min-height: 100vh;
       overflow: hidden;
     }
 
     .panel {
+      display: flex;
+      flex: 1; /* this evenly distributes the panels */
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
       background: #6B0F9C;
       box-shadow: inset 0 0 0 5px rgba(255,255,255,0.1);
       color: white;
@@ -52,12 +58,22 @@
     .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
     .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
 
-    /* Flex Children */
+    /* Flex Items */
     .panel > * {
+      display: flex;
+      flex: 1 0 auto;
+      justify-content: center;
+      align-items: center;
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
     }
+
+    .panel > *:first-child { transform: translateY(-100%);} /* translateY provides the in-and-out animation; -100% hides every first-child above the screen */ 
+    .panel.open-active > *:first-child { transform: translateY(0);} /* when the panel has a class of open-active, translateY(0) will display the first-child */ 
+    .panel > *:last-child { transform: translateY(100%);} 
+    .panel.open-active > *:last-child { transform: translateY(0);} 
+
 
     .panel p {
       text-transform: uppercase;
@@ -71,6 +87,7 @@
     }
 
     .panel.open {
+      flex: 5; /* this open panel will take up 5x the amount of remaining space */
       font-size: 40px;
     }
 
@@ -106,7 +123,20 @@
   </div>
 
   <script>
+    const panels = document.querySelectorAll('.panel');
 
+    function toggleOpen() {
+      this.classList.toggle('open');
+    }
+
+    function toggleActive(e) {
+      if(e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
+
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen))
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive))
   </script>
 
 
